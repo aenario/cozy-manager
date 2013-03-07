@@ -19,6 +19,12 @@ exports.execUntilEmpty = (commands, callback) ->
 # until there is no more command left. Spawn displays the output as it comes.
 exports.spawnUntilEmpty = (commands, callback) ->
     commandDescriptor = commands.shift()
+    
+    if os.platform().match /^win/
+        name = commandDescriptor.name
+        commandDescriptor.name = "cmd"
+        commandDescriptor.args.unshift(name)
+        commandDescriptor.args.unshift('/C')
 
     command = spawn(commandDescriptor.name, commandDescriptor.args,
                     commandDescriptor.opts)
